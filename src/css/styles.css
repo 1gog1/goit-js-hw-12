@@ -17,6 +17,13 @@
 @import url('./back-link.css');
 @import url('./footer.css'); */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
@@ -70,6 +77,7 @@ button:hover {
   margin: 0 0 30px 0;
   max-height: calc(100vh - 200px);
   overflow-y: auto;
+  min-width: 0;
 }
 
 .gallery-item {
@@ -81,6 +89,8 @@ button:hover {
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+
 }
 
 
@@ -100,6 +110,12 @@ button:hover {
   padding: 6px 10px;
   font-size: 12px;
   color: #444;
+}
+
+
+.gallery-link {
+  display: block;
+  width: 100%;
 }
 
 .loader-backdrop {
@@ -131,6 +147,8 @@ button:hover {
   display: block;
   margin: 20px auto;
 }
+
+
 
 
 .info {
