@@ -12,6 +12,10 @@ import {
 const form = document.querySelector('.form');
 const loadMoreBtn = document.querySelector('.load-more');
 
+document.addEventListener('DOMContentLoaded', () => {
+  hideLoadMoreButton();
+});
+
 let query = '';
 let page = 1;
 let totalPage = 0;
@@ -47,24 +51,30 @@ form.addEventListener('submit', async event => {
     createGallery(hits);
     totalPage = Math.ceil(totalHits / 15);
 
-    if (page < totalPage) {
+    if (page < totalPage && hits.length === 15) {
       showLoadMoreButton();
     }
   } catch (error) {
-    iziToast.error({ message: 'Something went wrong', position: 'topRight' });
+    iziToast.error({
+      message: 'Something went wrong',
+      position: 'topRight',
+    });
   }
 });
 
 loadMoreBtn.addEventListener('click', async () => {
+  if (!query) return;
   page += 1;
 
   try {
     const data = await getImagesByQuery(query, page);
     createGallery(data.hits);
 
-    scrollPage();
+    setTimeout(() => {
+      scrollPage();
+    }, 150);
 
-    if (page >= totalPage) {
+    if (data.hits.length < 15 || page >= totalPage) {
       hideLoadMoreButton();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
@@ -79,13 +89,11 @@ loadMoreBtn.addEventListener('click', async () => {
   }
 });
 
-
 function scrollPage() {
-    const card = document.querySelector('.gallery-item');
+  const card = document.querySelector('.gallery-item');
 
-    if (card) {
-        const cardHeight = card.getBoundingClientRect().height;
-        window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
-
-    };
-};
+  if (card) {
+    const cardHeight = card.getBoundingClientRect().height;
+    window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
+  }
+}
